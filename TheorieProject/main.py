@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from tkinter import * 
 import random
 
@@ -6,74 +7,114 @@ from jeu import Jeu
 
 players = []
 game = Jeu(players)
-width = 500
-height = 500
+width = 300
+height = 300
 
-def createGame():   
-    
-    print(game.joueurs)
+def createGame():
+    row = []
     for i in range(len(players[0].strategies)):
         for j in range(len(players[1].strategies)):
-            box = [ game.joueurs[0].strategies[i], game.joueurs[1].strategies[j] ] 
-            game.matrix.append(box)
-    game.display()
+            couple = [ game.joueurs[0].strategies[i], game.joueurs[1].strategies[j] ]
+            row.append(couple)
+        game.matrix.append(row)
+
     displayMatrix()
 
 
-
 def createPlayer():
-    player = Joueur(name.get(), [j for j in range(nb_strategies.get())])
+    player = Joueur(name.get(), [0 for j in range(nb_strategies.get())])
     players.append(player)
-    print(name.get(), "created with", nb_strategies.get(), "strategies")
+    print("Player", name.get(), "created with", nb_strategies.get(), "strategies.")
 
+box = []
+
+
+def displayMatrix():
+    
+    nb_lines = len(players[0].strategies)
+    nb_columns = len(players[1].strategies)
+    # print(nb_lines, nb_columns)
+    # print(game.matrix)
+    for i in range(nb_lines):
+        box.append([])
+        for j in range(nb_columns):
+            box[i].append(StringVar())
+            e = Entry(frame, textvariable=box[i][j], width = 5)
+            e.grid(row=i, column=j)
+            content = str(game.matrix[i][j][0]) + ", " + str(game.matrix[i][j][1])
+            e.insert(END, content)
+
+# method to read the user input matrix (GUI) and convert to list of lists
+def readMatrix():
+    matrix = []
+    for i in range(len(players[0].strategies)):
+        matrix.append([])
+        for j in range(len(players[1].strategies)):
+            split = box[i][j].get().split(",")
+            content = [int(split[0]), int(split[1])]
+            matrix[i].append(content)
+    print("USER INPUT:", matrix)
+    return matrix
+    
+
+def zeroSum():
+    game.matrix = readMatrix()
+    print("Zero-sum game:", game.estSommeNul1())
+    return game.estSommeNul1()
+
+
+def nash():
+    print("2, 2") #get result from yoann's method
+    return 0
+
+def reset():
+    lst = []
+    game = Jeu(lst)
 
 window = Tk()
 window.geometry(str(width)+"x"+str(height))
 window.title("Game Theory")
 
-label1 = Label(window, text="Name")
-label1.pack()
+
+
+_ = Label(window, text="Player name:")
+_.pack()
 
 name = StringVar(window)
 name.set("Benjyoatt")
 
-name_content = Entry(window, textvariable=name)
-name_content.pack()
+_ = Entry(window, textvariable=name)
+_.pack()
 
-label2 = Label(window, text="Number of strategies")
-label2.pack()
+_ = Label(window, text="Number of strategies:")
+_.pack()
 
 nb_strategies = IntVar(window)
 nb_strategies.set(2)
 
-s2 = Spinbox(window, from_=2, to=10, textvariable=nb_strategies)
-s2.pack()
+_ = Spinbox(window, from_=2, to=10, textvariable=nb_strategies)
+_.pack()
 
-button1 = Button(window, text="Create player", command=createPlayer)
-button1.pack()
+_ = Button(window, text="Create player", command=createPlayer)
+_.pack()
 
-button2 = Button(window, text="Create game", command=createGame)
-button2.pack()
+_ = Button(window, text="Create game", command=createGame)
+_.pack()
 
+_ = Label(window, text="Matrix")
+_.pack()
 
-label4 = Label(window, text="Matrix")
-label4.pack()
+frame = Frame(window)
+frame.pack()
 
+_ = Button(window, text="Zero-sum game?", command=zeroSum)
+_.pack()
 
+_ = Button(window, text="Nash equilibrium", command=nash)
+_.pack()
 
-def displayMatrix():
-    
-    entries = [[None for i in range (2)] for j in range (2)]
+_ = Button(window, text="RESET", command=reset)
+_.pack()
 
-    nb_lines = len(players[0].strategies)
-    nb_columns = len(players[1].strategies)
-    
-    for i in range(nb_lines):
-        for j in range(nb_columns):
-            box = Entry(window, textvariable=entries[i][j],width=3)
-            box.grid(row=i, column=j)
-            entires = box
-    
-          
 
 window.mainloop()

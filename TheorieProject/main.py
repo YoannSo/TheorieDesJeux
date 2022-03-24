@@ -7,8 +7,8 @@ from jeu import Jeu
 
 players = []
 game = Jeu(players)
-width = 300
-height = 300
+width = 500
+height = 500
 
 def createGame():
 

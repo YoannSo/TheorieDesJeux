@@ -64,8 +64,7 @@ class Jeu:
 
     def strategieDomine(self):
         # Pour tous les joueurs, on regarde leur strategie dominee
-        self.joueurs[0].strategies = [[0,0,0],[0,5,4],[4,3,2]]
-        self.joueurs[1].strategies = [[2,2,2],[3,5,7],[2,2,0]]
+        check = False
         for x in self.joueurs:
             # On fait deux iterateur qui vont comparer toutes les strategies
             for i in range (0,len(x.strategies)):
@@ -73,4 +72,8 @@ class Jeu:
                     if (i==j): continue
                     domine = self.estDominee(x.strategies[i],x.strategies[j])
                     if (domine):
+                        check = True
                         print("Pour le joueur ",x.name,", la strategie ",j," est domminee par la strategie ",i,";")
+        if(not check):
+            print("Pas de strategie dominee")
+                    

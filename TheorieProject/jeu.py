@@ -55,3 +55,22 @@ class Jeu:
                 if(j1Best):
                     allEquilibre.append(self.matrix[i][j])
         return allEquilibre 
+
+    def estDominee(semf,x,y):
+        for i in range (len(x)):
+            if x[i]<=y[i]:
+                return False
+        return True
+
+    def strategieDomine(self):
+        # Pour tous les joueurs, on regarde leur strategie dominee
+        self.joueurs[0].strategies = [[0,0,0],[0,5,4],[4,3,2]]
+        self.joueurs[1].strategies = [[2,2,2],[3,5,7],[2,2,0]]
+        for x in self.joueurs:
+            # On fait deux iterateur qui vont comparer toutes les strategies
+            for i in range (0,len(x.strategies)):
+                for j in range (0,len(x.strategies)):
+                    if (i==j): continue
+                    domine = self.estDominee(x.strategies[i],x.strategies[j])
+                    if (domine):
+                        print("Pour le joueur ",x.name,", la strategie ",j," est domminee par la strategie ",i,";")

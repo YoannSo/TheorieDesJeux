@@ -6,16 +6,13 @@ class Jeu:
     def get_matrix(self):
         return self.matrix
     
-    # def estSommeNul(self):
-    #     matrice= [[[-2,2],[-3,3],[-2,2]],[[-2,2],[-5,5],[-2,2]],[[-4,4],[-7,7],[0,0]]]
-    #     for i in range(0, len(matrice)):
-    #         for j in range(0, len(matrice[i])):
-    #             somme=0
-    #             for strategie in range (0,len(matrice[i][j])):
-    #                 somme+=matrice[i][j][strategie]
-    #             if(somme!=0):
-    #                 return False
-    #     return True
+    #Marche uniquement a 2 joueurs
+    def updateJoueur(self):
+        for i in range(len(self.joueurs[0].strategies)):
+            for j in range(len(self.joueurs[0].strategies)):
+                print("coucou, ca marche pas ici")
+            
+
 
     def estSommeNul1(self):
         for i in range(len(self.matrix)):
@@ -68,12 +65,18 @@ class Jeu:
         for x in self.joueurs:
             # On fait deux iterateur qui vont comparer toutes les strategies
             for i in range (0,len(x.strategies)):
+                dominant=True
                 for j in range (0,len(x.strategies)):
                     if (i==j): continue
                     domine = self.estDominee(x.strategies[i],x.strategies[j])
                     if (domine):
                         check = True
                         print("Pour le joueur ",x.name,", la strategie ",j," est domminee par la strategie ",i,";")
+                    else : dominant = False
+                if (dominant):
+                    print("La strategie ",i," du joueur ",x.name," est dominante.")
         if(not check):
             print("Pas de strategie dominee")
+
+    
                     

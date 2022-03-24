@@ -66,6 +66,10 @@ def displayMatrix():
             content = str(game.matrix[i][j][0]) + ", " + str(game.matrix[i][j][1])
             e.insert(END, content)
 
+def updateGame(game):
+    game.matrix = readMatrix()
+    game.updateJoueur()
+
 
 # method to read the user input matrix (GUI) and convert to list of lists
 def readMatrix():
@@ -150,7 +154,7 @@ _.pack()
 _ = Button(window, text="Nash equilibrium", command=nash)
 _.pack()
 
-_ = Button(window, text="dominees", command=strategieDomine)
+_ = Button(window, text="dominees / dominant", command=strategieDomine)
 _.pack()
 
 _ = Button(window, text="RESET", command=reset)

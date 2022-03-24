@@ -33,6 +33,8 @@ class Jeu:
         # j2 = Joueur("A",[[2,3,2],[2,5,2],[2,7,0]])
 
         # matrice= [[[0,2],[0,3],[0,2]],[[0,2],[5,5],[4,2]],[[4,2],[3,7],[2,0]]]
+        print(j1.strategies)
+        print(j2.strategies)
 
         for i in range(0, len(self.matrix)):
             for j in range(0, len(self.matrix[i])):
@@ -41,7 +43,7 @@ class Jeu:
                 j2Best=True
                 for k in range(0, len(j2.strategies[i])):
                     #print("Courant:"+str(gainCourant)+" Dans strat:" +str(j2.strategies[i][k]))
-                    if(gainCourant<j2.strategies[i][k]):
+                    if(gainCourant<j2.strategies[k][i]):
                         j2Best=False
                         break
                 if(j2Best==False):
@@ -49,12 +51,12 @@ class Jeu:
 
                 gainCourant=self.matrix[i][j][0]
                 for k in range(0,len(j1.strategies[i])):
-                    if(gainCourant<j1.strategies[k][i]):
+                    if(gainCourant<j1.strategies[k][j]):
                         j1Best=False
                         break
                 if(j1Best):
                     allEquilibre.append(self.matrix[i][j])
-        return allEquilibre 
+        return allEquilibre
 
     def estDominee(semf,x,y):
         for i in range (len(x)):

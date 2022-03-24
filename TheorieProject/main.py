@@ -11,18 +11,41 @@ width = 300
 height = 300
 
 def createGame():
-    row = []
+
+    # print("BEFORE")
+    # print(players[0].strategies)
+    # print(players[1].strategies)
+
+    # fill the sub lists for each players strategies
+    for sublist in players[0].strategies:
+        for i in range(len(players[1].strategies)):
+            sublist.append(random.randint(-5, 5))
+
+    for sublist in players[1].strategies:
+        for i in range(len(players[0].strategies)):
+            sublist.append(random.randint(-5, 5))
+
+    print("AFTER")
+    print(players[0].strategies)
+    print(players[1].strategies)
+
+    
+
     for i in range(len(players[0].strategies)):
+        row = []
         for j in range(len(players[1].strategies)):
-            couple = [ game.joueurs[0].strategies[i], game.joueurs[1].strategies[j] ]
+            couple = [ game.joueurs[0].strategies[i][j], game.joueurs[1].strategies[j][i] ]
             row.append(couple)
         game.matrix.append(row)
+    
+    print("joe", game.matrix)
 
     displayMatrix()
 
 
 def createPlayer():
-    player = Joueur(name.get(), [0 for j in range(nb_strategies.get())])
+    player = Joueur(name.get(), [ [] for i in range(nb_strategies.get()) ])
+    print("result", player.strategies)
     players.append(player)
     print("Player", name.get(), "created with", nb_strategies.get(), "strategies.")
 
@@ -63,11 +86,12 @@ def zeroSum():
     return game.estSommeNul1()
 
 
-def nash(players):
+def nash():
     game.matrix = readMatrix()
     result = game.equilibreDeNash(players[0], players[1])
     print("Nash:", result)
     return result
+    
     
 
 

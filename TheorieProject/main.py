@@ -30,7 +30,6 @@ box = []
 
 
 def displayMatrix():
-    
     nb_lines = len(players[0].strategies)
     nb_columns = len(players[1].strategies)
     # print(nb_lines, nb_columns)
@@ -43,6 +42,7 @@ def displayMatrix():
             e.grid(row=i, column=j)
             content = str(game.matrix[i][j][0]) + ", " + str(game.matrix[i][j][1])
             e.insert(END, content)
+
 
 # method to read the user input matrix (GUI) and convert to list of lists
 def readMatrix():
@@ -63,13 +63,20 @@ def zeroSum():
     return game.estSommeNul1()
 
 
-def nash():
-    print("2, 2") #get result from yoann's method
-    return 0
+def nash(players):
+    game.matrix = readMatrix()
+    result = game.equilibreDeNash(players[0], players[1])
+    print("Nash:", result)
+    return result
+    
+
 
 def reset():
     lst = []
     game = Jeu(lst)
+
+
+
 
 window = Tk()
 window.geometry(str(width)+"x"+str(height))

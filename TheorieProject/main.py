@@ -1,4 +1,4 @@
-from asyncio.windows_events import NULL
+#from asyncio.windows_events import NULL
 from tkinter import * 
 import random
 
@@ -56,6 +56,12 @@ def readMatrix():
     print("USER INPUT:", matrix)
     return matrix
     
+
+
+def strategieDomine():
+    game.matrix = readMatrix()
+    game.strategieDomine()
+    return 0
 
 def zeroSum():
     game.matrix = readMatrix()
@@ -118,6 +124,9 @@ _ = Button(window, text="Zero-sum game?", command=zeroSum)
 _.pack()
 
 _ = Button(window, text="Nash equilibrium", command=nash)
+_.pack()
+
+_ = Button(window, text="dominees", command=strategieDomine)
 _.pack()
 
 _ = Button(window, text="RESET", command=reset)

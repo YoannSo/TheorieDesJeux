@@ -6,50 +6,49 @@ import random
 from joueur import Joueur
 from jeu import Jeu
 
-players = []
-game = Jeu(players)
+game = Jeu([])
 width = 600
 height = 600
 
 def createGame():
+    
+    print("BEFORE")
+    print(game.joueurs[0].strategies)
+    print(game.joueurs[1].strategies)
 
-    # print("BEFORE")
-    # print(players[0].strategies)
-    # print(players[1].strategies)
-
-    # fill the sub lists for each players strategies
-    for sublist in players[0].strategies:
-        for i in range(len(players[1].strategies)):
+    # fill the sub lists for each game.joueurs strategies
+    for sublist in game.joueurs[0].strategies:
+        for i in range(len(game.joueurs[1].strategies)):
             sublist.append(random.randint(-5, 5))
 
-    for sublist in players[1].strategies:
-        for i in range(len(players[0].strategies)):
+    for sublist in game.joueurs[1].strategies:
+        for i in range(len(game.joueurs[0].strategies)):
             sublist.append(random.randint(-5, 5))
 
     
 
-    for i in range(len(players[0].strategies)):
+    for i in range(len(game.joueurs[0].strategies)):
         row = []
-        for j in range(len(players[1].strategies)):
+        for j in range(len(game.joueurs[1].strategies)):
             couple = [ game.joueurs[0].strategies[i][j], game.joueurs[1].strategies[j][i] ]
             row.append(couple)
         game.matrix.append(row)
-
     displayMatrix()
+    frame.pack()
 
 
 def createPlayer():
     player = Joueur(name.get(), [ [] for i in range(nb_strategies.get()) ])
     print("result", player.strategies)
-    players.append(player)
+    game.joueurs.append(player)
     print("Player", name.get(), "created with", nb_strategies.get(), "strategies.")
 
 
 box = []
 
 def displayMatrix():
-    nb_lines = len(players[0].strategies)
-    nb_columns = len(players[1].strategies)
+    nb_lines = len(game.joueurs[0].strategies)
+    nb_columns = len(game.joueurs[1].strategies)
     for i in range(nb_lines):
         box.append([])
         for j in range(nb_columns):
@@ -66,8 +65,8 @@ def updateGame():
 
 
 def clearMatrix():
-    nb_lines = len(players[0].strategies)
-    nb_columns = len(players[1].strategies)
+    nb_lines = len(game.joueurs[0].strategies)
+    nb_columns = len(game.joueurs[1].strategies)
     for i in range(nb_lines):
         for j in range(nb_columns):
             e = Entry(frame, textvariable=_, width = 5)
@@ -79,9 +78,9 @@ def clearMatrix():
 # method to read the user input matrix (GUI) and convert to list of lists
 def readMatrix():
     matrix = []
-    for i in range(len(players[0].strategies)):
+    for i in range(len(game.joueurs[0].strategies)):
         matrix.append([])
-        for j in range(len(players[1].strategies)):
+        for j in range(len(game.joueurs[1].strategies)):
             split = box[i][j].get().split(",")
             content = [int(split[0]), int(split[1])]
             matrix[i].append(content)
@@ -104,7 +103,7 @@ def zeroSum():
 
 def nash():
     updateGame()
-    result = game.equilibreDeNash(players[0], players[1])
+    result = game.equilibreDeNash(game.joueurs[0], game.joueurs[1])
     print("Nash:", result)
     return result
 
@@ -122,7 +121,7 @@ strategy_box = []
 # method to enter mixed strategies for a player (player 0)
 def enterMixedStrategies():
     # the number of probabilities to enter is = to the number of strategies
-    nb_strategies = len(players[0].strategies) # get the number of strategies for player 0
+    nb_strategies = len(game.joueurs[0].strategies) # get the number of strategies for player 0
     for i in range(nb_strategies):
         strategy_box.append(StringVar())
         e = Entry(frame1, textvariable=strategy_box[i], width = 5)
@@ -134,7 +133,7 @@ def enterMixedStrategies():
 # method to read the probability of each strategy entered by the user
 def readMixedStrategies():
     mixed_strategies = []
-    nb_strategies = len(players[0].strategies) # get the number of strategies for player 0
+    nb_strategies = len(game.joueurs[0].strategies) # get the number of strategies for player 0
     for i in range(nb_strategies):
         content = float(strategy_box[i].get())
         mixed_strategies.append(content)
@@ -153,13 +152,13 @@ def simulate():
     
 def reset():
     clearMatrix()
+    updateGame()
     frame.pack_forget()
     frame1.pack_forget()
-    players = []
     game.joueurs = []
     game.matrix = []
     print("Players have been reset!")
-    # displayMatrix()
+    
     
 
 

@@ -1,5 +1,6 @@
 from tkinter import * 
 import random
+import matplotlib.pyplot as plt
 
 
 from joueur import Joueur
@@ -29,7 +30,7 @@ def createGame():
             row.append(couple)
         game.matrix.append(row)
     displayMatrix()
-    frame.pack()
+    showOptions()
 
 
 def createPlayer():
@@ -38,11 +39,35 @@ def createPlayer():
     print("Player", name.get(), "created with", nb_strategies.get(), "strategies.")
 
 
+def showOptions():
+    label_matrix.pack()
+    frame.pack()
+    label_zero_sum.pack()
+    label_nash.pack()
+    label_dominated.pack()
+    label_mix_nash.pack()
+    label_create_mix.pack()
+    frame1.pack()
+    label_simulate.pack()
+
+def hideOptions():
+    label_matrix.pack_forget()
+    frame.pack_forget()
+    label_zero_sum.pack_forget()
+    label_nash.pack_forget()
+    label_dominated.pack_forget()
+    label_mix_nash.pack_forget()
+    label_create_mix.pack_forget()
+    frame1.pack_forget()
+    label_simulate.pack_forget()
+
+
 box = []
 
 def displayMatrix():
     nb_lines = len(game.joueurs[0].strategies)
     nb_columns = len(game.joueurs[1].strategies)
+    box.clear()
     for i in range(nb_lines):
         box.append([])
         for j in range(nb_columns):
@@ -121,6 +146,7 @@ def enterMixedStrategies():
         e.grid(row = i)
         content = ""
         e.insert(END, content)
+        frame1.pack()
 
 
 # method to read the probability of each strategy entered by the user
@@ -180,13 +206,17 @@ def simulate():
         
         print("Player 1 gains:", sum(player1_gains), ", average per turn:", sum(player1_gains)/100)
         print("Player 2 gains:", sum(player2_gains), ", average per turn:", sum(player2_gains)/100)
-    
+
+        fig, ax = plt.subplots()
+        ax.plot(player1_gains, 'ro', label="Player 1")
+        ax.plot(player2_gains, 'bo', label="Player 2")
+        fig.legend()
+        fig.show()
 
 def reset():
     clearMatrix()
     updateGame()
-    frame.pack_forget()
-    frame1.pack_forget()
+    hideOptions()
     game.joueurs = []
     game.matrix = []
     print("Players have been reset!")
@@ -223,35 +253,35 @@ _.pack()
 _ = Button(window, text="Create game", command=createGame)
 _.pack()
 
-_ = Label(window, text="Matrix")
-_.pack()
+label_matrix = Label(window, text="Matrix")
+# label_matrix.pack()
 
 frame = Frame(window)
-frame.pack()
+# frame.pack()
 
-_ = Button(window, text="Zero-sum game?", command=zeroSum)
-_.pack()
+label_zero_sum = Button(window, text="Zero-sum game?", command=zeroSum)
+# label_zero_sum.pack()
 
-_ = Button(window, text="Nash equilibrium", command=nash)
-_.pack()
+label_nash = Button(window, text="Nash equilibrium", command=nash)
+# label_nash.pack()
 
-_ = Button(window, text="dominees / dominant", command=strategieDomine)
-_.pack()
+label_dominated = Button(window, text="Dominant & Dominated Strategies", command=strategieDomine)
+# label_dominated.pack()
 
-_ = Button(window, text="Mixed Nash equilibrium", command=mixedNash)
-_.pack()
+label_mix_nash = Button(window, text="Mixed Nash equilibrium", command=mixedNash)
+# label_mix_nash.pack()
 
-_ = Button(window, text="Mixed strategies", command=enterMixedStrategies)
-_.pack()
+label_create_mix = Button(window, text="Create a mixed strategy", command=enterMixedStrategies)
+# label_create_mix.pack()
 
 frame1 = Frame(window)
-frame1.pack()
+# frame1.pack()
 
-_ = Button(window, text="Simulate", command=simulate)
-_.pack()
+label_simulate = Button(window, text="Simulate", command=simulate)
+# label_simulate.pack()
 
 _ = Button(window, text="RESET", command=reset)
-_.pack()
+_.pack(side = BOTTOM)
 
 
 window.mainloop()

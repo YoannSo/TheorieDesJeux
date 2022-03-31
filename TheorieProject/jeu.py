@@ -156,6 +156,6 @@ class Jeu:
             xIntersection=1*nashEquilibreJ1
             yIntersection=1*nashEquilibreJ2
             plt.plot(xIntersection,yIntersection,'o')
-        # plt.show()
+        plt.show()
 
         return utiliteJ1, utiliteJ2

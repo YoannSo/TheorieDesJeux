@@ -79,6 +79,16 @@ def clearMatrix():
             content = ""
             e.insert(END, content)
 
+def clearMatrix():
+    nb_lines = len(players[0].strategies)
+    nb_columns = len(players[1].strategies)
+    for i in range(nb_lines):
+        for j in range(nb_columns):
+            e = Entry(frame, textvariable=_, width = 5)
+            e.grid(row = i, column = j)
+            content = ""
+            e.insert(END, content)
+
 # method to read the user input matrix (GUI) and convert to list of lists
 def readMatrix():
     matrix = []

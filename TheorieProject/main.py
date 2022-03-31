@@ -13,6 +13,7 @@ height = 600
 
 def createGame():
 
+    frame.pack()
     # print("BEFORE")
     # print(players[0].strategies)
     # print(players[1].strategies)
@@ -149,6 +150,9 @@ def simulate():
         return
     else:
         print("Simulating game over 100 iterations")
+        player1_gain = 0
+        player2_gain = 0
+
 
     
 def reset():

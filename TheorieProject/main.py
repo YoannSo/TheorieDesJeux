@@ -25,10 +25,6 @@ def createGame():
         for i in range(len(players[0].strategies)):
             sublist.append(random.randint(-5, 5))
 
-    # print("AFTER")
-    # print(players[0].strategies)
-    # print(players[1].strategies)
-
     
 
     for i in range(len(players[0].strategies)):
@@ -53,8 +49,6 @@ box = []
 def displayMatrix():
     nb_lines = len(players[0].strategies)
     nb_columns = len(players[1].strategies)
-    # print(nb_lines, nb_columns)
-    # print(game.matrix)
     for i in range(nb_lines):
         box.append([])
         for j in range(nb_columns):
@@ -68,17 +62,6 @@ def displayMatrix():
 def updateGame(game):
     game.matrix = readMatrix()
     game.updateJoueur()
-
-
-def clearMatrix():
-    nb_lines = len(players[0].strategies)
-    nb_columns = len(players[1].strategies)
-    for i in range(nb_lines):
-        for j in range(nb_columns):
-            e = Entry(frame, textvariable=_, width = 5)
-            e.grid(row = i, column = j)
-            content = ""
-            e.insert(END, content)
 
 
 # method to read the user input matrix (GUI) and convert to list of lists
@@ -96,7 +79,7 @@ def readMatrix():
 
 
 def strategieDomine():
-    game.matrix = readMatrix()
+    updateGame()
     game.strategieDomine()
     return 
 

@@ -8,11 +8,32 @@ class Jeu:
     
     #Marche uniquement a 2 joueurs
     def updateJoueur(self):
-        for i in range(len(self.joueurs[0].strategies)):
-            for j in range(len(self.joueurs[0].strategies)):
-                print("coucou, ca marche pas ici")
-            
+        self.joueurs[0].strategies = []
+        for i in range (len(self.matrix)):
+            self.joueurs[0].strategies.append([])
 
+
+        self.joueurs[1].strategies = []
+        for i in range (len(self.matrix)):
+            self.joueurs[1].strategies.append([])
+
+        """ Pour J1 """
+        # x dans la matrice    
+        for ligne in range(len(self.joueurs[0].strategies)):
+            buf= []
+            # y dans la matrice
+            for colonne in range(len(self.joueurs[1].strategies)):
+                valeur = self.matrix[ligne][colonne][0]
+                buf.append(valeur)
+            self.joueurs[0].strategies[ligne]=buf
+                
+        """ Pour J2 """ 
+        for colonne in range(len(self.joueurs[1].strategies)):  
+            buf = []
+            for ligne in range(len(self.joueurs[0].strategies)):
+                valeur = self.matrix[ligne][colonne][1]
+                buf.append(valeur)
+            self.joueurs[1].strategies[colonne]=buf
 
     def estSommeNul1(self):
         for i in range(len(self.matrix)):

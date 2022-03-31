@@ -81,4 +81,54 @@ class Jeu:
             print("Pas de strategie dominee")
 
     
+    def equilibreDeNashMixte(self):
+        allEquilibre=[]
+        #j1 = Joueur("A",[[2,1],[0,1]])
+        #j2 = Joueur("A",[[1,0],[0,2]])
+        j1 = self.joueurs[0]
+        j2 = self.joueurs[1]
+        # matrice= [[[1,1],[1,1]],[[-1,-1],[2,0]]]
+        
+        utilitej1s1=[j1.strategies[0][0]-(j1.strategies[0][1]),(j1.strategies[0][1])]
+        utilitej1s2=[j1.strategies[1][0]-(j1.strategies[1][1]),(j1.strategies[1][1])]
+        
+        utilitej2s1=[j2.strategies[0][0]-(j2.strategies[1][0]),(j2.strategies[1][0])]
+        utilitej2s2=[j2.strategies[0][1]-(j2.strategies[1][1]),(j2.strategies[1][1])]
+
+        utiliteJ1=[utilitej1s1[0]-utilitej1s2[0],utilitej1s1[1]-utilitej1s2[1]]
+        utiliteJ2=[utilitej2s1[0]-utilitej2s2[0],utilitej2s1[1]-utilitej2s2[1]]
+        
+        xJ1=np.linspace(0,1,500)
+        xJ2=np.linspace(0,1,500)
+        yJ1=np.linspace(0,1,500)
+        yJ2=np.linspace(0,1,500)
+        i=0
+        for x in xJ2:
+            if utiliteJ1[0]*x + utiliteJ1[1] > 0:
+                yJ2[i] = 1
+            else:
+                yJ2[i] = 0
+            i+=1
+                
+        i=0   
+        for x in xJ1:
+            if utiliteJ2[0]*x + utiliteJ2[1] > 0:
+                xJ1[i] = 1
+            else:
+                xJ1[i] = 0
+            i+=1
+        utiliteJ1=[abs(utiliteJ1[0]),abs(utiliteJ1[1])]
+        utiliteJ2=[abs(utiliteJ2[0]),abs(utiliteJ2[1])]
+        nashEquilibreJ1 = float(utiliteJ1[1])/float(utiliteJ1[0])
+        nashEquilibreJ2= float(utiliteJ2[1])/float(utiliteJ2[0])
+        print(nashEquilibreJ1,nashEquilibreJ2)
+        if(nashEquilibreJ1 + nashEquilibreJ2 <=2 and nashEquilibreJ1 + nashEquilibreJ2>=0):
+            stringNashEquilibreJ1=str(utiliteJ1[1])+"/"+str(utiliteJ1[0])
+            stringNashEquilibreJ2=str(utiliteJ2[1])+"/"+str(utiliteJ2[0])
+
+            print("Ceci sont les equilibres de nash en strategie mixtes:\n J1:"+stringNashEquilibreJ1+"\n J2:"+stringNashEquilibreJ2)
+            plt.plot(xJ1, yJ1,"-")
+            plt.plot(xJ2, yJ2,"-")
+        else:
+            print("Aucun equilibre de nash en strategie mixtes")
                     

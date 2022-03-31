@@ -64,6 +64,7 @@ def displayMatrix():
             content = str(game.matrix[i][j][0]) + ", " + str(game.matrix[i][j][1])
             e.insert(END, content)
 
+
 def updateGame(game):
     game.matrix = readMatrix()
     game.updateJoueur()
@@ -79,15 +80,6 @@ def clearMatrix():
             content = ""
             e.insert(END, content)
 
-def clearMatrix():
-    nb_lines = len(players[0].strategies)
-    nb_columns = len(players[1].strategies)
-    for i in range(nb_lines):
-        for j in range(nb_columns):
-            e = Entry(frame, textvariable=_, width = 5)
-            e.grid(row = i, column = j)
-            content = ""
-            e.insert(END, content)
 
 # method to read the user input matrix (GUI) and convert to list of lists
 def readMatrix():
@@ -106,7 +98,8 @@ def readMatrix():
 def strategieDomine():
     game.matrix = readMatrix()
     game.strategieDomine()
-    return 0
+    return 
+
 
 def zeroSum():
     game.matrix = readMatrix()
@@ -119,12 +112,54 @@ def nash():
     result = game.equilibreDeNash(players[0], players[1])
     print("Nash:", result)
     return result
-    
+
+
+def mixedNash():
+    updateGame()
+    game.equilibreDeNashMixte()
     
 
 
+
+
+strategy_box = []
+
+# method to enter mixed strategies for a player (player 0)
+def enterMixedStrategies():
+    # the number of probabilities to enter is = to the number of strategies
+    nb_strategies = len(players[0].strategies) # get the number of strategies for player 0
+    for i in range(nb_strategies):
+        strategy_box.append(StringVar())
+        e = Entry(frame1, textvariable=strategy_box[i], width = 5)
+        e.grid(row = i)
+        content = ""
+        e.insert(END, content)
+
+
+# method to read the probability of each strategy entered by the user
+def readMixedStrategies():
+    mixed_strategies = []
+    nb_strategies = len(players[0].strategies) # get the number of strategies for player 0
+    for i in range(nb_strategies):
+        content = float(strategy_box[i].get())
+        mixed_strategies.append(content)
+    print(mixed_strategies)
+    return mixed_strategies
+
+
+def simulate():
+    mixed_strategies = readMixedStrategies()
+    if(sum(mixed_strategies) > 1):
+        print("Please change probabilites so the total sum is equal to 1.")
+        return
+    else:
+        print("Simulating game over 100 iterations")
+
+    
 def reset():
     clearMatrix()
+    frame.pack_forget()
+    frame1.pack_forget()
     players = []
     game.joueurs = []
     game.matrix = []
@@ -136,7 +171,6 @@ def reset():
 window = Tk()
 window.geometry(str(width)+"x"+str(height))
 window.title("Game Theory")
-
 
 
 _ = Label(window, text="Player name:")
@@ -176,6 +210,18 @@ _ = Button(window, text="Nash equilibrium", command=nash)
 _.pack()
 
 _ = Button(window, text="dominees / dominant", command=strategieDomine)
+_.pack()
+
+_ = Button(window, text="Mixed Nash equilibrium", command=mixedNash)
+_.pack()
+
+_ = Button(window, text="Mixed strategies", command=enterMixedStrategies)
+_.pack()
+
+frame1 = Frame(window)
+frame1.pack()
+
+_ = Button(window, text="Simulate", command=simulate)
 _.pack()
 
 _ = Button(window, text="RESET", command=reset)

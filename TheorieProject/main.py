@@ -7,8 +7,8 @@ from jeu import Jeu
 
 players = []
 game = Jeu(players)
-width = 500
-height = 500
+width = 600
+height = 600
 
 def createGame():
 
@@ -25,9 +25,9 @@ def createGame():
         for i in range(len(players[0].strategies)):
             sublist.append(random.randint(-5, 5))
 
-    print("AFTER")
-    print(players[0].strategies)
-    print(players[1].strategies)
+    # print("AFTER")
+    # print(players[0].strategies)
+    # print(players[1].strategies)
 
     
 
@@ -37,8 +37,6 @@ def createGame():
             couple = [ game.joueurs[0].strategies[i][j], game.joueurs[1].strategies[j][i] ]
             row.append(couple)
         game.matrix.append(row)
-    
-    print("joe", game.matrix)
 
     displayMatrix()
 
@@ -49,8 +47,8 @@ def createPlayer():
     players.append(player)
     print("Player", name.get(), "created with", nb_strategies.get(), "strategies.")
 
-box = []
 
+box = []
 
 def displayMatrix():
     nb_lines = len(players[0].strategies)
@@ -71,6 +69,16 @@ def updateGame(game):
     game.updateJoueur()
 
 
+def clearMatrix():
+    nb_lines = len(players[0].strategies)
+    nb_columns = len(players[1].strategies)
+    for i in range(nb_lines):
+        for j in range(nb_columns):
+            e = Entry(frame, textvariable=_, width = 5)
+            e.grid(row = i, column = j)
+            content = ""
+            e.insert(END, content)
+
 # method to read the user input matrix (GUI) and convert to list of lists
 def readMatrix():
     matrix = []
@@ -80,7 +88,7 @@ def readMatrix():
             split = box[i][j].get().split(",")
             content = [int(split[0]), int(split[1])]
             matrix[i].append(content)
-    print("USER INPUT:", matrix)
+    # print("USER INPUT:", matrix)
     return matrix
     
 
@@ -106,10 +114,13 @@ def nash():
 
 
 def reset():
-    lst = []
-    game = Jeu(lst)
-
-
+    clearMatrix()
+    players = []
+    game.joueurs = []
+    game.matrix = []
+    print("Players have been reset!")
+    # displayMatrix()
+    
 
 
 window = Tk()

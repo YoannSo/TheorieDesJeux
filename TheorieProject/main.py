@@ -1,6 +1,7 @@
-#from asyncio.windows_events import NULL
+
 from tkinter import * 
 import random
+
 
 from joueur import Joueur
 from jeu import Jeu
@@ -59,9 +60,20 @@ def displayMatrix():
             e.insert(END, content)
 
 
-def updateGame(game):
+def updateGame():
     game.matrix = readMatrix()
     game.updateJoueur()
+
+
+def clearMatrix():
+    nb_lines = len(players[0].strategies)
+    nb_columns = len(players[1].strategies)
+    for i in range(nb_lines):
+        for j in range(nb_columns):
+            e = Entry(frame, textvariable=_, width = 5)
+            e.grid(row = i, column = j)
+            content = ""
+            e.insert(END, content)
 
 
 # method to read the user input matrix (GUI) and convert to list of lists
@@ -85,13 +97,13 @@ def strategieDomine():
 
 
 def zeroSum():
-    game.matrix = readMatrix()
+    updateGame()
     print("Zero-sum game:", game.estSommeNul1())
     return game.estSommeNul1()
 
 
 def nash():
-    game.matrix = readMatrix()
+    updateGame()
     result = game.equilibreDeNash(players[0], players[1])
     print("Nash:", result)
     return result

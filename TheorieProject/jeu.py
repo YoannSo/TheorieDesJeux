@@ -1,3 +1,6 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
 class Jeu:
     def __init__(self,joueurs):
         self.joueurs=joueurs
@@ -51,8 +54,8 @@ class Jeu:
         # j2 = Joueur("A",[[2,3,2],[2,5,2],[2,7,0]])
 
         # matrice= [[[0,2],[0,3],[0,2]],[[0,2],[5,5],[4,2]],[[4,2],[3,7],[2,0]]]
-        print(j1.strategies)
-        print(j2.strategies)
+        # print(j1.strategies)
+        # print(j2.strategies)
 
         for i in range(0, len(self.matrix)):
             for j in range(0, len(self.matrix[i])):
@@ -151,5 +154,8 @@ class Jeu:
             plt.plot(xJ1, yJ1,"-")
             plt.plot(xJ2, yJ2,"-")
         else:
+            plt.plot(xJ1, yJ1,"-")
+            plt.plot(xJ2, yJ2,"-")
             print("Aucun equilibre de nash en strategie mixtes")
+        plt.show()
                     

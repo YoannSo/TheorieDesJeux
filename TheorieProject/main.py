@@ -1,4 +1,3 @@
-
 from tkinter import * 
 import random
 
@@ -11,10 +10,6 @@ width = 600
 height = 600
 
 def createGame():
-    
-    print("BEFORE")
-    print(game.joueurs[0].strategies)
-    print(game.joueurs[1].strategies)
 
     # fill the sub lists for each game.joueurs strategies
     for sublist in game.joueurs[0].strategies:
@@ -39,7 +34,6 @@ def createGame():
 
 def createPlayer():
     player = Joueur(name.get(), [ [] for i in range(nb_strategies.get()) ])
-    print("result", player.strategies)
     game.joueurs.append(player)
     print("Player", name.get(), "created with", nb_strategies.get(), "strategies.")
 
@@ -103,17 +97,16 @@ def zeroSum():
 
 def nash():
     updateGame()
-    result = game.equilibreDeNash(game.joueurs[0], game.joueurs[1])
+    result = game.equilibreDeNash()
     print("Nash:", result)
     return result
 
 
 def mixedNash():
     updateGame()
-    game.equilibreDeNashMixte()
-    
-
-
+    result = game.equilibreDeNashMixte()
+    print("Mixed Nash:", result)
+    return result
 
 
 strategy_box = []
@@ -137,22 +130,58 @@ def readMixedStrategies():
     for i in range(nb_strategies):
         content = float(strategy_box[i].get())
         mixed_strategies.append(content)
-    print(mixed_strategies)
+    # print(mixed_strategies)
     return mixed_strategies
 
 
 def simulate():
     mixed_strategies = readMixedStrategies()
-    if(sum(mixed_strategies) > 1):
+    print(sum(mixed_strategies))
+    if(sum(mixed_strategies) != 1):
         print("Please change probabilites so the total sum is equal to 1.")
         return
+
     else:
         print("Simulating game over 100 iterations")
-        player1_gain = 0
-        player2_gain = 0
+        player1_gains = []
+        player2_gains = []
+        utilJ1, utilJ2 = game.equilibreDeNashMixte()
 
+        # player 1's probabilites for both his strategies
+        p0_J1, p1_J1 = mixed_strategies[0], mixed_strategies[1]
 
+        # player 2's probabilites for both his strategies 
+        # TODO doesn't always return values between 0 and 1 !!!!
+        p0_J2, p1_J2 = utilJ2[1]/utilJ2[0], 1-utilJ2[1]/utilJ2[0]
+        
+        print("J1", p0_J1, p1_J1)
+        print("J2", p0_J2, p1_J2)
+
+        mixedJ2 = [p0_J2, p1_J2]
+        for i in range(100): # 100 iterations
+            rand = random.uniform(0, 1) # generate a random to chose what strategy to chose for each player
+            
+            if(rand > p0_J1): # then chose p1_J1
+                if(rand > p0_J2): # then chose p1_J2
+                    index = 1, 1 # <=> line 1, column 1
+                else: 
+                    index = 1, 0 # maybe the other way around (0, 1)?
+            else:
+                if(rand > p0_J2):
+                    index = 0, 1
+                else:
+                    index = 0, 0
+
+            player1_gains.append(game.matrix[index[0]][index[1]][0])
+            player2_gains.append(game.matrix[index[0]][index[1]][1])
+
+        # print("box chosen is", index)
+        # print(game.matrix[index[0]][index[1]])
+        
+        print("Player 1 gains:", sum(player1_gains), ", average per turn:", sum(player1_gains)/100)
+        print("Player 2 gains:", sum(player2_gains), ", average per turn:", sum(player2_gains)/100)
     
+
 def reset():
     clearMatrix()
     updateGame()

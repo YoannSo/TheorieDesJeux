@@ -1,3 +1,4 @@
+import string
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -48,14 +49,11 @@ class Jeu:
                     return False
         return True
 
-    def equilibreDeNash(self, j1, j2):
+    def equilibreDeNash(self):
         allEquilibre=[]
-        # j1 = Joueur("A",[[0,0,0],[0,5,4],[4,3,2]])
-        # j2 = Joueur("A",[[2,3,2],[2,5,2],[2,7,0]])
-
-        # matrice= [[[0,2],[0,3],[0,2]],[[0,2],[5,5],[4,2]],[[4,2],[3,7],[2,0]]]
-        # print(j1.strategies)
-        # print(j2.strategies)
+        j1 = self.joueurs[0]
+        j2 = self.joueurs[1]
+       
 
         for i in range(0, len(self.matrix)):
             for j in range(0, len(self.matrix[i])):
@@ -152,15 +150,12 @@ class Jeu:
             stringNashEquilibreJ1=str(utiliteJ1[1])+"/"+str(utiliteJ1[0])
             stringNashEquilibreJ2=str(utiliteJ2[1])+"/"+str(utiliteJ2[0])
 
-            print("Ceci sont les equilibres de nash en strategie mixtes:\n J1:"+stringNashEquilibreJ1+"\n J2:"+stringNashEquilibreJ2)
+            # print("Ceci sont les equilibres de nash en strategie mixtes:\n J1:"+stringNashEquilibreJ1+"\n J2:"+stringNashEquilibreJ2)
             plt.plot(xJ1, yJ1,"-")
             plt.plot(xJ2, yJ2,"-")
             xIntersection=1*nashEquilibreJ1
             yIntersection=1*nashEquilibreJ2
             plt.plot(xIntersection,yIntersection,'o')
-        plt.show()
+        # plt.show()
 
-
-
-        
-                    
+        return utiliteJ1, utiliteJ2

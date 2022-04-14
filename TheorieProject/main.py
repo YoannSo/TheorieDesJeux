@@ -211,7 +211,7 @@ def simulate():
                     if(rand > p0_J2): # then chose p1_J2
                         index = 1, 1 # <=> line 1, column 1
                     else: 
-                        index = 1, 0 # maybe the other way around (0, 1)?
+                        index = 1, 0
                 else:
                     if(rand > p0_J2):
                         index = 0, 1
@@ -220,9 +220,6 @@ def simulate():
 
                 player1_gains.append(game.matrix[index[0]][index[1]][0])
                 player2_gains.append(game.matrix[index[0]][index[1]][1])
-
-            # print("box chosen is", index)
-            # print(game.matrix[index[0]][index[1]])
             
             print("Player 1 gains:", sum(player1_gains), ", average per turn:", sum(player1_gains)/100)
             print("Player 2 gains:", sum(player2_gains), ", average per turn:", sum(player2_gains)/100)

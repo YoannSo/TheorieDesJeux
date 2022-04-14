@@ -11,16 +11,19 @@ width = 600
 height = 600
 
 def getResult(strategies):
-    print("coucou")
+    value = []
+    for i in range(len(strategies)):
+        value.append(game.joueurs[i].getValue(strategies,i,game));
+    return value;
 
 def buildMatrix(strategies):
+    
     if (len(strategies)==len(game.joueurs)):
-        res = []
-        for i in range (len(strategies)):
-            res.append(getResult(strategies)) 
-        return res
+        print(strategies)
+        return getResult(strategies)
     else : 
         matrix = []
+        
         for i in range (len(game.joueurs[len(strategies)-1].strategies)):
             copy= strategies.copy()
             copy.append(i)
@@ -29,29 +32,13 @@ def buildMatrix(strategies):
         return matrix
 
 def createGame():
+   
+    
     if (len(game.joueurs) == 2):
         # fill the sub lists for each game.joueurs strategies
-        for sublist in game.joueurs[0].strategies:
-            for i in range(len(game.joueurs[1].strategies)):
-                sublist.append(random.randint(-5, 5)) 
-
-        for sublist in game.joueurs[1].strategies:
-            for i in range(len(game.joueurs[0].strategies)):
-                sublist.append(random.randint(-5, 5))
-
-
-        for i in range(len(game.joueurs[0].strategies)):
-            row = []
-            for j in range(len(game.joueurs[1].strategies)):
-                couple = [ game.joueurs[0].strategies[i][j], game.joueurs[1].strategies[j][i] ]
-                row.append(couple)
-            game.matrix.append(row)
-
-        displayMatrix()
-    else:
-        # On a déjà les strategies mais vide
         for i in range (len(game.joueurs)):
             total = 1
+            
             for j in range(len(game.joueurs)):
                 if (i!=j):
                     total*=len(game.joueurs[j].strategies)
@@ -60,11 +47,35 @@ def createGame():
                 for i in range (total):
                     sublist.append(random.randint(-5, 5)) 
 
+        for i in range(len(game.joueurs[0].strategies)):
+            row = []
+            for j in range(len(game.joueurs[1].strategies)):
+                couple = [ game.joueurs[0].strategies[i][j], game.joueurs[1].strategies[j][i] ]
+                row.append(couple)
+            game.matrix.append(row)
+        print("Strat J1")
+        print(game.joueurs[0].strategies)
+        print("Strat J2")
+        print(game.joueurs[1].strategies)
+        displayMatrix()
+        """
+        # On a déjà les strategies mais vide
+        
+        for i in range (len(game.joueurs)):
+            total = 1
+            
+            for j in range(len(game.joueurs)):
+                if (i!=j):
+                    total*=len(game.joueurs[j].strategies)
+
+            for sublist in game.joueurs[i].strategies:
+                for i in range (total):
+                    sublist.append(random.randint(-5, 5)) 
+        """
         # On build la matrice
-        i = 0
-        strategies=[]
-        matrix = buildMatrix([])
-        print(matrix)    
+    i = 0
+    matrix = buildMatrix([])
+    print(matrix)    
 
     showOptions()
 

@@ -11,27 +11,42 @@ width = 600
 height = 600
 
 def createGame():
+    if (len(game.joueurs) == 2):
+        # fill the sub lists for each game.joueurs strategies
+        for sublist in game.joueurs[0].strategies:
+            for i in range(len(game.joueurs[1].strategies)):
+                sublist.append(random.randint(-5, 5)) 
 
-    # fill the sub lists for each game.joueurs strategies
-    for sublist in game.joueurs[0].strategies:
-        for i in range(len(game.joueurs[1].strategies)):
-            sublist.append(random.randint(-5, 5))
+        for sublist in game.joueurs[1].strategies:
+            for i in range(len(game.joueurs[0].strategies)):
+                sublist.append(random.randint(-5, 5))
 
-    for sublist in game.joueurs[1].strategies:
+
         for i in range(len(game.joueurs[0].strategies)):
-            sublist.append(random.randint(-5, 5))
+            row = []
+            for j in range(len(game.joueurs[1].strategies)):
+                couple = [ game.joueurs[0].strategies[i][j], game.joueurs[1].strategies[j][i] ]
+                row.append(couple)
+            game.matrix.append(row)
+        
+        displayMatrix()    
 
-    
 
-    for i in range(len(game.joueurs[0].strategies)):
-        row = []
-        for j in range(len(game.joueurs[1].strategies)):
-            couple = [ game.joueurs[0].strategies[i][j], game.joueurs[1].strategies[j][i] ]
-            row.append(couple)
-        game.matrix.append(row)
-    displayMatrix()
+
+
+
+    # else:
+    #     for i in range(len(game.joueurs)): # for each player
+    #         for sublist in game.joueurs[i].strategies: # for each sublist
+    #             for j in range(len(game.joueurs[j].strategies)): # for each value
+    #                 sublist.append(random.randint(-5, 5)) # append a random strategy (int between -5 and 5)]
+    #                 row = []
+    #                 couple = [ game.joueurs[i].strategies[i][j], game.joueurs[j].strategies[j][i] ]
+    #                 row.append(couple)
+    #             game.matrix.append(row)
+        
+
     showOptions()
-
 
 def createPlayer():
     player = Joueur(name.get(), [ [] for i in range(nb_strategies.get()) ])
@@ -48,7 +63,6 @@ def showOptions():
     label_mix_nash.pack()
     label_create_mix.pack()
     frame1.pack()
-    label_simulate.pack()
 
 def hideOptions():
     label_matrix.pack_forget()
@@ -107,7 +121,6 @@ def readMatrix():
     return matrix
     
 
-
 def strategieDomine():
     updateGame()
     game.strategieDomine()
@@ -129,9 +142,10 @@ def nash():
 
 def mixedNash():
     updateGame()
-    result = game.equilibreDeNashMixte()
-    print("Mixed Nash:", result)
-    return result
+    boolean,nash1,nash2 = game.equilibreDeNashMixte()
+    if boolean:
+        print("Mixed Nash:", nash1 , nash2)
+        return nash1,nash2
 
 
 strategy_box = []
@@ -148,6 +162,9 @@ def enterMixedStrategies():
         e.insert(END, content)
         frame1.pack()
 
+    # display the simulate label
+    label_simulate.pack()
+
 
 # method to read the probability of each strategy entered by the user
 def readMixedStrategies():
@@ -161,6 +178,7 @@ def readMixedStrategies():
 
 
 def simulate():
+    updateGame()
     mixed_strategies = readMixedStrategies()
     print(sum(mixed_strategies))
     if(sum(mixed_strategies) != 1):
@@ -171,47 +189,48 @@ def simulate():
         print("Simulating game over 100 iterations")
         player1_gains = []
         player2_gains = []
-        utilJ1, utilJ2 = game.equilibreDeNashMixte()
+        mixteExists, utilJ1, utilJ2 = game.equilibreDeNashMixte()
+        print(mixteExists, "return value")
 
-        # player 1's probabilites for both his strategies
-        p0_J1, p1_J1 = mixed_strategies[0], mixed_strategies[1]
+        if(mixteExists):
+            # player 1's probabilites for both his strategies
+            p0_J1, p1_J1 = mixed_strategies[0], mixed_strategies[1]
 
-        # player 2's probabilites for both his strategies 
-        # TODO doesn't always return values between 0 and 1 !!!!
-        p0_J2, p1_J2 = utilJ2[1]/utilJ2[0], 1-utilJ2[1]/utilJ2[0]
-        
-        print("J1", p0_J1, p1_J1)
-        print("J2", p0_J2, p1_J2)
-
-        mixedJ2 = [p0_J2, p1_J2]
-        for i in range(100): # 100 iterations
-            rand = random.uniform(0, 1) # generate a random to chose what strategy to chose for each player
+            # player 2's probabilites for both his strategies 
+            # TODO doesn't always return values between 0 and 1 !!!!
+            p0_J2, p1_J2 = utilJ2, utilJ1
             
-            if(rand > p0_J1): # then chose p1_J1
-                if(rand > p0_J2): # then chose p1_J2
-                    index = 1, 1 # <=> line 1, column 1
-                else: 
-                    index = 1, 0 # maybe the other way around (0, 1)?
-            else:
-                if(rand > p0_J2):
-                    index = 0, 1
+            print("J1", p0_J1, p1_J1)
+            print("J2", p0_J2, p1_J2)
+
+            mixedJ2 = [p0_J2, p1_J2]
+            for i in range(100): # 100 iterations
+                rand = random.uniform(0, 1) # generate a random to chose what strategy to chose for each player
+                
+                if(rand > p0_J1): # then chose p1_J1
+                    if(rand > p0_J2): # then chose p1_J2
+                        index = 1, 1 # <=> line 1, column 1
+                    else: 
+                        index = 1, 0 # maybe the other way around (0, 1)?
                 else:
-                    index = 0, 0
+                    if(rand > p0_J2):
+                        index = 0, 1
+                    else:
+                        index = 0, 0
 
-            player1_gains.append(game.matrix[index[0]][index[1]][0])
-            player2_gains.append(game.matrix[index[0]][index[1]][1])
+                player1_gains.append(game.matrix[index[0]][index[1]][0])
+                player2_gains.append(game.matrix[index[0]][index[1]][1])
 
-        # print("box chosen is", index)
-        # print(game.matrix[index[0]][index[1]])
-        
-        print("Player 1 gains:", sum(player1_gains), ", average per turn:", sum(player1_gains)/100)
-        print("Player 2 gains:", sum(player2_gains), ", average per turn:", sum(player2_gains)/100)
+            # print("box chosen is", index)
+            # print(game.matrix[index[0]][index[1]])
+            
+            print("Player 1 gains:", sum(player1_gains), ", average per turn:", sum(player1_gains)/100)
+            print("Player 2 gains:", sum(player2_gains), ", average per turn:", sum(player2_gains)/100)
 
-        fig, ax = plt.subplots()
-        ax.plot(player1_gains, 'ro', label="Player 1")
-        ax.plot(player2_gains, 'bo', label="Player 2")
-        fig.legend()
-        fig.show()
+            plt.plot(player1_gains, "ro", label="Player 1")
+            plt.plot(player2_gains, "bo", label="Player 2")
+            plt.legend()
+            plt.show()
 
 def reset():
     clearMatrix()
@@ -222,8 +241,6 @@ def reset():
     print("Players have been reset!")
     
     
-
-
 window = Tk()
 window.geometry(str(width)+"x"+str(height))
 window.title("Game Theory")

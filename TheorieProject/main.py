@@ -17,13 +17,16 @@ def buildMatrix(strategies):
     if (len(strategies)==len(game.joueurs)):
         res = []
         for i in range (len(strategies)):
-            res.append(getResult(strategies))
+            res.append(getResult(strategies)) 
         return res
-    matrix = []
-    for i in range (len(game.joueurs[len(strategies)].strategies)):
-        strategies.append(i)
-        matrix.append(buildMatrix(strategies))
-    return matrix
+    else : 
+        matrix = []
+        for i in range (len(game.joueurs[len(strategies)-1].strategies)):
+            copy= strategies.copy()
+            copy.append(i)
+            matrix.append(buildMatrix(copy))
+           
+        return matrix
 
 def createGame():
     if (len(game.joueurs) == 2):

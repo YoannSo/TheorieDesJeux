@@ -114,58 +114,63 @@ class Jeu:
         utilitej1s1=[j1.strategies[0][0]-(j1.strategies[0][1]),(j1.strategies[0][1])]
         utilitej1s2=[j1.strategies[1][0]-(j1.strategies[1][1]),(j1.strategies[1][1])]
         
-        utilitej2s1=[j2.strategies[0][0]-(j2.strategies[1][0]),(j2.strategies[1][0])]
-        utilitej2s2=[j2.strategies[0][1]-(j2.strategies[1][1]),(j2.strategies[1][1])]
-
+        utilitej2s1=[j2.strategies[0][0]-(j2.strategies[0][1]),(j2.strategies[0][1])]
+        utilitej2s2=[j2.strategies[1][0]-(j2.strategies[1][1]),(j2.strategies[1][1])]
+        print(utilitej2s1,utilitej2s2)
         utiliteJ1=[utilitej1s1[0]-utilitej1s2[0],utilitej1s1[1]-utilitej1s2[1]]
         utiliteJ2=[utilitej2s1[0]-utilitej2s2[0],utilitej2s1[1]-utilitej2s2[1]]
+
+
+        utiliteJ1=[utiliteJ1[0],-utiliteJ1[1]]
+        utiliteJ2=[utiliteJ2[0],-utiliteJ2[1]]
+        if(utiliteJ1[0]==0 or utiliteJ2[0]==0):
+            print("Pas d'equilibre de nash mixte non pur")
+            return False,None, None
+        nashEquilibreJ1 = float(utiliteJ1[1])/float(utiliteJ1[0])
+        nashEquilibreJ2= float(utiliteJ2[1])/float(utiliteJ2[0])
         
+        print(utiliteJ1)
         xJ1=np.linspace(0,1,500)
         xJ2=np.linspace(0,1,500)
         yJ1=np.linspace(0,1,500)
         yJ2=np.linspace(0,1,500)
         i=0
+
+     
         for x in xJ2:
-            value=utiliteJ1[0]*x + utiliteJ1[1]
-            if value > 0:
+            if x > abs(utiliteJ2[1]/utiliteJ2[0]):
                 yJ2[i] = 1
-            elif value !=0:
+            else:
                 yJ2[i] = 0
             i+=1
                 
         i=0   
         for x in xJ1:
-            value=utiliteJ2[0]*x + utiliteJ2[1]
-            if value > 0:
+            if x > abs(utiliteJ1[1]/utiliteJ1[0]):
                 xJ1[i] = 1
-            elif value !=0:
+            else:
                 xJ1[i] = 0
             i+=1
         print(utiliteJ1,utiliteJ2)
 
-        utiliteJ1=[-utiliteJ1[0],utiliteJ1[1]]
-        utiliteJ2=[-utiliteJ2[0],utiliteJ2[1]]
-        if(utiliteJ1[0]==0 or utiliteJ2[0]==0):
-            print("Pas d'equilibre de nash mixte")
-            return False,None, None
-        nashEquilibreJ1 = float(utiliteJ1[1])/float(utiliteJ1[0])
-        nashEquilibreJ2= float(utiliteJ2[1])/float(utiliteJ2[0])
+        
+        
         if(nashEquilibreJ1<0 or nashEquilibreJ2<0):
-            print("Pas d'equilibre de nash mixte")
+            print("Pas d'equilibre de nash mixte non pur")
             return False,None, None
-        if(nashEquilibreJ1 + nashEquilibreJ2 <=2 and nashEquilibreJ1 + nashEquilibreJ2>=0):
+        if(nashEquilibreJ1<=1 and nashEquilibreJ2<=1 and nashEquilibreJ1>=0 and nashEquilibreJ2>=0):
             stringNashEquilibreJ1=str(utiliteJ1[1])+"/"+str(utiliteJ1[0])
             stringNashEquilibreJ2=str(utiliteJ2[1])+"/"+str(utiliteJ2[0])
 
             print("Ceci sont les equilibres de nash en strategie mixtes:\n J1:"+stringNashEquilibreJ1+"\n J2:"+stringNashEquilibreJ2)
             plt.plot(xJ1, yJ1,"-")
             plt.plot(xJ2, yJ2,"-")
-            xIntersection=1*nashEquilibreJ1
-            yIntersection=1*nashEquilibreJ2
-            plt.plot(xIntersection,yIntersection,'o')
+            xIntersection=nashEquilibreJ1
+            yIntersection=nashEquilibreJ2
+            plt.plot(yIntersection,xIntersection,'o')
             plt.show()
         else:
-            print("Pas d'equilibre de nash mixte")
+            print("Pas d'equilibre de nash mixte non pur")
             return False,None, None
         
 

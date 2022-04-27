@@ -54,36 +54,7 @@ class Jeu:
                     somme+=self.matrix[i][j][strategie]
                 if(somme!=0):
                     return False
-        return True
-    
-    #def equilibreDeNash(self):
-    #    allEquilibre=[]
-    #    j1 = self.joueurs[0]
-    #    j2 = self.joueurs[1]
-       
-
-    #    for i in range(0, len(self.matrix)):
-    #        for j in range(0, len(self.matrix[i])):
-    #            gainCourant=self.matrix[i][j][1]
-    #            j1Best= True
-    #            j2Best=True
-    #            for k in range(0, len(j2.strategies[i])):
-    #                #print("Courant:"+str(gainCourant)+" Dans strat:" +str(j2.strategies[i][k]))
-    #                if(gainCourant<j2.strategies[k][i]):
-    #                    j2Best=False
-    #                    break
-    #            if(j2Best==False):
-    #                continue
-
-    #            gainCourant=self.matrix[i][j][0]
-    #            for k in range(0,len(j1.strategies[i])):
-    #                if(gainCourant<j1.strategies[k][j]):
-    #                    j1Best=False
-    #                    break
-    #            if(j1Best):
-    #                allEquilibre.append(self.matrix[i][j])
-    #    return allEquilibre
-   
+        return True   
 
     def listeStrat(self,strategies,liste):
         if (len(strategies)==len(self.joueurs)):
@@ -99,30 +70,21 @@ class Jeu:
 
 
     def checkNash(self,x):
-        print("-----------------------------")
+        
         iterateur = 0
         valeurDeBase = self.getResult(x)
-        print(valeurDeBase)
-        print(x)
-        print("--->")
         bool = False
         for iterateur in range(len(x)):
             stratTest = x.copy()
             for i in range (len(self.joueurs[iterateur].strategies)):
                 stratTest[iterateur]=i
-                print("stratTest")
-                print(stratTest)
                 valeur=self.getResult(stratTest)
-                print(valeur)
-                print(valeurDeBase)
-                print("comparaison sur la case"+str(iterateur))
                 if(valeur[iterateur]>valeurDeBase[iterateur]):
                     bool = True
                     break
             
              # S il y a mieux
             if (bool == True):
-                print("N est pas un equilibre")
                 break
         return bool
 
@@ -135,12 +97,8 @@ class Jeu:
             if(self.checkNash(x)==False):
                 allEquilibre.append(self.getResult(x))
         return allEquilibre
-        
-            
 
-    
-
-    def estDominee(semf,x,y):
+    def estDominee(self,x,y):
         for i in range (len(x)):
             if x[i]<=y[i]:
                 return False
@@ -168,11 +126,8 @@ class Jeu:
     
     def equilibreDeNashMixte(self):
         allEquilibre=[]
-        #j1 = Joueur("A",[[2,1],[0,1]])
-        #j2 = Joueur("A",[[1,0],[0,2]])
         j1 = self.joueurs[0]
         j2 = self.joueurs[1]
-        # matrice= [[[1,1],[1,1]],[[-1,-1],[2,0]]]
         
         utilitej1s1=[j1.strategies[0][0]-(j1.strategies[0][1]),(j1.strategies[0][1])]
         utilitej1s2=[j1.strategies[1][0]-(j1.strategies[1][1]),(j1.strategies[1][1])]

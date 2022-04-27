@@ -144,48 +144,56 @@ def readMatrix():
     
 
 def strategieDomine():
-    #updateGame()
+    if (len(game.matrix)<3):
+        updateGame()
     game.strategieDomine()
     return 
 
 
 def zeroSum():
-    updateGame()
+    if (len(game.matrix)<3):
+        updateGame()
     print("Zero-sum game:", game.estSommeNul1())
     return game.estSommeNul1()
 
 
 def nash():
-    #updateGame()
+    if (len(game.matrix)<3):
+        updateGame()
     result = game.equilibreDeNash()
     print("Nash:", result)
     return result
 
 
 def mixedNash():
-    updateGame()
-    boolean,nash1,nash2 = game.equilibreDeNashMixte()
-    if boolean:
-        print("Mixed Nash:", nash1 , nash2)
-        return nash1,nash2
-
+    if (len(game.matrix)==2):
+        updateGame()
+        boolean,nash1,nash2 = game.equilibreDeNashMixte()
+        if boolean:
+            print("Mixed Nash:", nash1 , nash2)
+            return nash1,nash2
+    else:
+        print("Pas dans une matrice 2x2")
 
 strategy_box = []
 
 # method to enter mixed strategies for a player (player 0)
 def enterMixedStrategies():
+    if (len(game.matrix)==2):
     # the number of probabilities to enter is = to the number of strategies
-    nb_strategies = len(game.joueurs[0].strategies) # get the number of strategies for player 0
-    for i in range(nb_strategies):
-        strategy_box.append(StringVar())
-        e = Entry(frame1, textvariable=strategy_box[i], width = 5)
-        e.grid(row = i)
-        content = ""
-        e.insert(END, content)
-        frame1.pack()
+        nb_strategies = len(game.joueurs[0].strategies) # get the number of strategies for player 0
+        for i in range(nb_strategies):
+            strategy_box.append(StringVar())
+            e = Entry(frame1, textvariable=strategy_box[i], width = 5)
+            e.grid(row = i)
+            content = ""
+            e.insert(END, content)
+            frame1.pack()
 
-    # display the simulate label
-    label_simulate.pack()
+        # display the simulate label
+        label_simulate.pack()
+    else:
+        print("Pas dans une matrice 2x2")
 
 
 # method to read the probability of each strategy entered by the user
@@ -200,7 +208,8 @@ def readMixedStrategies():
 
 
 def simulate():
-    updateGame()
+    if (len(game.matrix)<3):
+        updateGame()
     mixed_strategies = readMixedStrategies()
     if(sum(mixed_strategies) != 1):
         print("Please change probabilites so the total sum is equal to 1.")
@@ -254,12 +263,13 @@ def simulate():
 
 
 def reset():
-    clearMatrix()
-    clearMixedStrategies()
-    updateGame()
-    hideOptions()
-    game.joueurs = []
-    game.matrix = []
+    if (len(game.matrix)>0):
+        clearMatrix()
+        clearMixedStrategies()
+        updateGame()
+        hideOptions()
+        game.joueurs = []
+        game.matrix = []
     print("Players have been reset!")
     
     

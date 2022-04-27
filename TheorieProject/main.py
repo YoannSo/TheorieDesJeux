@@ -10,15 +10,10 @@ game = Jeu([])
 width = 600
 height = 600
 
-def getResult(strategies):
-    value = []
-    for i in range(len(strategies)):
-        value.append(game.joueurs[i].getValue(strategies,i,game));
-    return value;
 
 def buildMatrix(strategies):
     if (len(strategies)==len(game.joueurs)):
-        return getResult(strategies)
+        return game.getResult(strategies)
     else:
         matrix = []
         strat = strategies.copy()
@@ -63,7 +58,7 @@ def createGame():
         print("J"+str(i)+":")
         print(game.joueurs[i].strategies)
     print(matrix)    
-
+    game.matrix = matrix
     showOptions()
 
 def createPlayer():
@@ -149,7 +144,7 @@ def readMatrix():
     
 
 def strategieDomine():
-    updateGame()
+    #updateGame()
     game.strategieDomine()
     return 
 
@@ -161,7 +156,7 @@ def zeroSum():
 
 
 def nash():
-    updateGame()
+    #updateGame()
     result = game.equilibreDeNash()
     print("Nash:", result)
     return result

@@ -46,15 +46,25 @@ class Jeu:
                 buf.append(valeur)
             self.joueurs[1].strategies[colonne]=buf
 
-    def estSommeNul1(self):
-        for i in range(len(self.matrix)):
-            for j in range(len(self.matrix[i])):
-                somme = 0
-                for strategie in range (len(self.matrix[i][j])):
-                    somme+=self.matrix[i][j][strategie]
-                if(somme!=0):
+    def estSommeNull(self,strategies):
+        if (len(strategies)==len(self.joueurs)):
+            res = self.getResult(strategies)
+            tot = 0
+            for i in range(len(res)):
+                tot += res[i]
+            if (tot==0):
+                return True
+            else:
+                return False
+        else:
+            strat = strategies.copy()
+            strat.append(0)
+            for i in range(len(self.joueurs[len(strategies)].strategies)):
+                if(self.estSommeNull(strat)==False):
                     return False
-        return True   
+                strat[len(strategies)]+=1
+            return True
+
 
     def listeStrat(self,strategies,liste):
         if (len(strategies)==len(self.joueurs)):

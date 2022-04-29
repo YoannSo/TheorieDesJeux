@@ -40,6 +40,7 @@ def createGame():
         for sublist in game.joueurs[i].strategies:
             for i in range (total):
                 sublist.append(random.randint(-5, 5)) 
+                #sublist.append(0)
     if(len(game.joueurs)==2):        
         for i in range(len(game.joueurs[0].strategies)):
             row = []
@@ -144,21 +145,21 @@ def readMatrix():
     
 
 def strategieDomine():
-    if (len(game.matrix)<3):
+    if (len(game.joueurs)==2):
         updateGame()
     game.strategieDomine()
     return 
 
 
 def zeroSum():
-    if (len(game.matrix)<3):
+    if (len(game.joueurs)==2):
         updateGame()
-    print("Zero-sum game:", game.estSommeNul1())
-    return game.estSommeNul1()
+    print("Zero-sum game:", game.estSommeNull([]))
+    return game.estSommeNull([])
 
 
 def nash():
-    if (len(game.matrix)<3):
+    if (len(game.joueurs)==2):
         updateGame()
     result = game.equilibreDeNash()
     print("Nash:", result)
@@ -166,7 +167,7 @@ def nash():
 
 
 def mixedNash():
-    if (len(game.matrix)==2):
+    if (len(game.joueurs)==2 and game.joueurs[0].nb_strategies==2 and  game.joueurs[1].nb_strategies==2):
         updateGame()
         boolean,nash1,nash2 = game.equilibreDeNashMixte()
         if boolean:

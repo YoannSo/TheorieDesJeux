@@ -1,11 +1,12 @@
-import string
+# Import the necessary modules
 import numpy as np
 import matplotlib.pyplot as plt
 
+# Game class
 class Jeu:
     def __init__(self,joueurs):
-        self.joueurs=joueurs
-        self.matrix = []
+        self.joueurs=joueurs # each game has players
+        self.matrix = [] # and a matrix
 
     def get_matrix(self):
         return self.matrix
@@ -16,13 +17,11 @@ class Jeu:
             value.append(self.joueurs[i].getValue(strategies,i,self));
         return value;
 
-
     #Marche uniquement a 2 joueurs
     def updateJoueur(self):
         self.joueurs[0].strategies = []
         for i in range (len(self.matrix)):
             self.joueurs[0].strategies.append([])
-
 
         self.joueurs[1].strategies = []
         for i in range (len(self.matrix)):
@@ -46,6 +45,8 @@ class Jeu:
                 buf.append(valeur)
             self.joueurs[1].strategies[colonne]=buf
 
+
+    # Method that returns if the game is zero-sum or not
     def estSommeNull(self,strategies):
         if (len(strategies)==len(self.joueurs)):
             res = self.getResult(strategies)
@@ -99,6 +100,7 @@ class Jeu:
         return bool
 
 
+    # Method that retuns the Nash equlibrium
     def equilibreDeNash(self):
         allEquilibre=[]
         strategies = [0]*(len(self.joueurs)-1)
@@ -108,12 +110,16 @@ class Jeu:
                 allEquilibre.append(self.getResult(x))
         return allEquilibre
 
+
+    # Method that returns if a strategy is dominated or not
     def estDominee(self,x,y):
         for i in range (len(x)):
             if x[i]<=y[i]:
                 return False
         return True
 
+
+    # Method to find all dominated strategies
     def strategieDomine(self):
         # Pour tous les joueurs, on regarde leur strategie dominee
         check = False
@@ -139,6 +145,7 @@ class Jeu:
         j1 = self.joueurs[0]
         j2 = self.joueurs[1]
         
+        #on va calculer les utilités de chaque strategie de chaque joueurs comme vu en cours avec p et q
         utilitej1s1=[j1.strategies[0][0]-(j1.strategies[0][1]),(j1.strategies[0][1])]
         utilitej1s2=[j1.strategies[1][0]-(j1.strategies[1][1]),(j1.strategies[1][1])]
         
@@ -151,9 +158,13 @@ class Jeu:
 
         utiliteJ1=[utiliteJ1[0],-utiliteJ1[1]]
         utiliteJ2=[utiliteJ2[0],-utiliteJ2[1]]
+
+        #pour eviter la division par 0
         if(utiliteJ1[0]==0 or utiliteJ2[0]==0):
             print("Pas d'equilibre de nash mixte non pur")
             return False,None, None
+
+        #ensuite notre equilibre de nash mixte non pure est un membre sur l'autre, comme vu dans le cours pour l'equation
         nashEquilibreJ1 = float(utiliteJ1[1])/float(utiliteJ1[0])
         nashEquilibreJ2= float(utiliteJ2[1])/float(utiliteJ2[0])
         
@@ -164,7 +175,7 @@ class Jeu:
         yJ2=np.linspace(0,1,500)
         i=0
 
-     
+     #on va pouvoir ensuite creer deux fonctions entre 0 et 1 ,avant l'equilibre de nash c'est egale a 0 et apres c'est egal a 1. Le croisement entre les deux fonctions est l'equilibre de nash en solution mixtes non pure
         for x in xJ2:
             if x > abs(utiliteJ2[1]/utiliteJ2[0]):
                 yJ2[i] = 1
@@ -179,10 +190,7 @@ class Jeu:
             else:
                 xJ1[i] = 0
             i+=1
-        print(utiliteJ1,utiliteJ2)
 
-        
-        
         if(nashEquilibreJ1<0 or nashEquilibreJ2<0):
             print("Pas d'equilibre de nash mixte non pur")
             return False,None, None
@@ -201,5 +209,4 @@ class Jeu:
             print("Pas d'equilibre de nash mixte non pur")
             return False,None, None
         
-
         return True,nashEquilibreJ1, nashEquilibreJ2

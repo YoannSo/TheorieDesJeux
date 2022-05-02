@@ -14,8 +14,8 @@ class Jeu:
     def getResult(self,strategies):
         value = []
         for i in range(len(strategies)):
-            value.append(self.joueurs[i].getValue(strategies,i,self));
-        return value;
+            value.append(self.joueurs[i].getValue(strategies,i,self))
+        return value
 
     #Marche uniquement a 2 joueurs
     def updateJoueur(self):

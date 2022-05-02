@@ -52,10 +52,11 @@ def createGame():
     i = 0
     matrix = buildMatrix([])
     for i in range(len(game.joueurs)):
-        print("J"+str(i)+":")
+        print("J"+str(i)+" strategies :")
         print(game.joueurs[i].strategies)
-    print(matrix)    
+    print("Game matrix:", matrix)
     game.matrix = matrix
+    print("Game created successfully.")
 
     showOptions() # display the options once the game is created
 
@@ -283,7 +284,7 @@ def reset():
         hideOptions()
         game.joueurs = []
         game.matrix = []
-    print("Players have been reset!")
+    print("Game has been reset!")
 
   
 # TKinter 

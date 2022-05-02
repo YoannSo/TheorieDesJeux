@@ -151,7 +151,7 @@ class Jeu:
         
         utilitej2s1=[j2.strategies[0][0]-(j2.strategies[0][1]),(j2.strategies[0][1])]
         utilitej2s2=[j2.strategies[1][0]-(j2.strategies[1][1]),(j2.strategies[1][1])]
-        print(utilitej2s1,utilitej2s2)
+        # print(utilitej2s1,utilitej2s2)
         utiliteJ1=[utilitej1s1[0]-utilitej1s2[0],utilitej1s1[1]-utilitej1s2[1]]
         utiliteJ2=[utilitej2s1[0]-utilitej2s2[0],utilitej2s1[1]-utilitej2s2[1]]
 
@@ -168,7 +168,7 @@ class Jeu:
         nashEquilibreJ1 = float(utiliteJ1[1])/float(utiliteJ1[0])
         nashEquilibreJ2= float(utiliteJ2[1])/float(utiliteJ2[0])
         
-        print(utiliteJ1)
+        # print(utiliteJ1)
         xJ1=np.linspace(0,1,500)
         xJ2=np.linspace(0,1,500)
         yJ1=np.linspace(0,1,500)

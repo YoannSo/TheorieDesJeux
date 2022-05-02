@@ -52,7 +52,7 @@ def createGame():
     i = 0
     matrix = buildMatrix([])
     for i in range(len(game.joueurs)):
-        print("J"+str(i)+" strategies :")
+        print(game.joueurs[i].name, "strategies :")
         print(game.joueurs[i].strategies)
     print("Game matrix:", matrix)
     game.matrix = matrix
@@ -231,12 +231,12 @@ def simulate():
         return
 
     else:
-        print("Simulating game over 100 iterations")
         player1_gains = []
         player2_gains = []
         mixteExists, _, utilJ2 = game.equilibreDeNashMixte()
 
         if(mixteExists): # check if there is a mixed Nash equilibrium
+            print("Simulating game over 100 iterations")
             # player 1's probabilites for both his strategies
             p0_J1, p1_J1 = mixed_strategies[0], mixed_strategies[1]
 
